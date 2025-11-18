@@ -56,7 +56,7 @@ jobs:
           git config --global user.name "Isaac Foster"
           
           # Stage updated CSV files; adjust the paths as needed
-          git add -f football/nfl/preprocessing/data/*.csv football/nfl/training/data/*.csv
+          git add -f football/nfl/preprocessing/data/*.csv
 
           # Commit changes (if there are any)
           git commit -m "Update CSV data from GitHub Action" || echo "No CSV changes to commit"
