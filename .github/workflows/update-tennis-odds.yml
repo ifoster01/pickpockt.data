@@ -1,0 +1,55 @@
+name: Daily Tennis Odds Workflow
+
+on:
+  # Runs every day at 11:00 UTC (which is 7:00 AM EST during standard time)
+  schedule:
+    - cron: "0 11 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-tennis-odds-scripts:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+      
+      - name: Set up Git LFS
+        run: |
+          git lfs install
+          git lfs pull
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      
+      - name: Check Python version
+        run: python --version
+
+      - name: Install requirements from requirements.txt
+        working-directory: ./
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          cd tennis/atp/preprocessing
+          python3 odds_scraper.py
+          cd ..
+      
+      - name: Commit CSV changes
+        run: |
+          git config --global user.email "ifoster41901@gmail.com"
+          git config --global user.name "Isaac Foster"
+          
+          # Stage updated CSV files; adjust the paths as needed
+          git add -f tennis/atp/preprocessing/data/*.csv
+
+          # Commit changes (if there are any)
+          git commit -m "Updated CSV odds data from GitHub Action" || echo "No CSV odds changes to commit"
+          
+          # Push changes back to the branch that triggered the workflow
+          git push origin HEAD:${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

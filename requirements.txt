@@ -1,0 +1,12 @@
+setuptools==75.4.0
+selenium==4.28.1
+urllib3==1.26.20
+beautifulsoup4==4.12.2
+requests==2.31.0
+python-dotenv==1.0.1
+supabase==2.10.0
+scikit-learn==1.5.2
+hyperopt==0.2.7
+xgboost==2.1.2
+pandas==2.2.3
+crawlbase==1.0.0

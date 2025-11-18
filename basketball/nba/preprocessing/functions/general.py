@@ -1,0 +1,116 @@
+def get_team_from_name(team):
+    team_names = {
+        'bos': ['Boston Celtics', 'Celtics', 'boston celtics', 'celtics'],
+        'nyk': ['New York Knicks', 'Knicks', 'new york knicks', 'knicks'],
+        'phi': ['Philadelphia 76ers', '76ers', 'philadelphia 76ers', '76ers'],
+        'brk': ['Brooklyn Nets', 'New Jersey Nets', 'Nets', 'brooklyn nets', 'new jersey nets'],
+        'tor': ['Toronto Raptors', 'Raptors', 'toronto raptors', 'raptors'],
+        'cle': ['Cleveland Cavaliers', 'Cavaliers', 'cleveland cavaliers', 'cavaliers'],
+        'mil': ['Milwaukee Bucks', 'Bucks', 'milwaukee bucks', 'bucks'],
+        'ind': ['Indiana Pacers', 'Pacers', 'indiana pacers', 'pacers'],
+        'det': ['Detroit Pistons', 'Pistons', 'detroit pistons', 'pistons'],
+        'chi': ['Chicago Bulls', 'Bulls', 'chicago bulls', 'bulls'],
+        'atl': ['Atlanta Hawks', 'Hawks', 'atlanta hawks', 'hawks'],
+        'orl': ['Orlando Magic', 'Magic', 'orlando magic', 'magic'],
+        'mia': ['Miami Heat', 'Heat', 'miami heat', 'heat'],
+        'cho': ['Charlotte Hornets', 'Charlotte Bobcats', 'Hornets', 'charlotte hornets', 'charlotte bobcats'],
+        'was': ['Washington Wizards', 'Wizards', 'washington wizards', 'wizards'],
+        'okc': ['Oklahoma City Thunder', 'Seattle SuperSonics', 'Thunder', 'oklahoma city thunder', 'seattle super sonics'],
+        'den': ['Denver Nuggets', 'Nuggets', 'denver nuggets', 'nuggets'],
+        'min': ['Minnesota Timberwolves', 'Timberwolves', 'minnesota timberwolves', 'timberwolves'],
+        'por': ['Portland Trail Blazers', 'Trail Blazers', 'portland trail blazers', 'trail blazers'],
+        'uta': ['Utah Jazz', 'Jazz', 'utah jazz', 'jazz'],
+        'lac': ['Los Angeles Clippers', 'Clippers', 'los angeles clippers', 'clippers'],
+        'lal': ['Los Angeles Lakers', 'Lakers', 'los angeles lakers', 'lakers'],
+        'sac': ['Sacramento Kings', 'Kings', 'sacramento kings', 'kings'],
+        'gsw': ['Golden State Warriors', 'Warriors', 'golden state warriors', 'warriors'],
+        'pho': ['Phoenix Suns', 'Suns', 'phoenix suns', 'suns'],
+        'hou': ['Houston Rockets', 'Rockets', 'houston rockets', 'rockets'],
+        'mem': ['Memphis Grizzlies', 'Vancouver Grizzlies', 'Grizzlies', 'memphis grizzlies', 'vancouver grizzlies'],
+        'dal': ['Dallas Mavericks', 'Mavericks', 'dallas mavericks', 'mavericks'],
+        'sas': ['San Antonio Spurs', 'Spurs', 'san antonio spurs', 'spurs'],
+        'nop': ['New Orleans Pelicans', 'New Orleans Hornets', 'Pelicans', 'new orleans pelicans', 'new orleans hornets']
+    }
+
+    for key, value in team_names.items():
+        if team.lower() in value:
+            return key
+
+def get_name_from_team(team):
+    team_names = {
+        'bos': ['Boston Celtics', 'Celtics'],
+        'nyk': ['New York Knicks', 'Knicks'],
+        'phi': ['Philadelphia 76ers', '76ers'],
+        'brk': ['Brooklyn Nets', 'Nets'],
+        'njn': ['Brooklyn Nets', 'Nets'],
+        'tor': ['Toronto Raptors', 'Raptors'],
+        'cle': ['Cleveland Cavaliers', 'Cavaliers'],
+        'mil': ['Milwaukee Bucks', 'Bucks'],
+        'ind': ['Indiana Pacers', 'Pacers'],
+        'det': ['Detroit Pistons', 'Pistons'],
+        'chi': ['Chicago Bulls', 'Bulls'],
+        'atl': ['Atlanta Hawks', 'Hawks'],
+        'orl': ['Orlando Magic', 'Magic'],
+        'mia': ['Miami Heat', 'Heat'],
+        'cho': ['Charlotte Hornets', 'Hornets'],
+        'cha': ['Charlotte Hornets', 'Hornets'],
+        'chh': ['Charlotte Hornets', 'Hornets'],
+        'was': ['Washington Wizards', 'Wizards'],
+        'okc': ['Oklahoma City Thunder', 'Thunder'],
+        'sea': ['Oklahoma City Thunder', 'Thunder'],
+        'den': ['Denver Nuggets', 'Nuggets'],
+        'min': ['Minnesota Timberwolves', 'Timberwolves'],
+        'por': ['Portland Trail Blazers', 'Trail Blazers'],
+        'uta': ['Utah Jazz', 'Jazz'],
+        'lac': ['Los Angeles Clippers', 'Clippers'],
+        'lal': ['Los Angeles Lakers', 'Lakers'],
+        'sac': ['Sacramento Kings', 'Kings'],
+        'gsw': ['Golden State Warriors', 'Warriors'],
+        'pho': ['Phoenix Suns', 'Suns'],
+        'hou': ['Houston Rockets', 'Rockets'],
+        'mem': ['Memphis Grizzlies', 'Grizzlies'],
+        'van': ['Memphis Grizzlies', 'Grizzlies'],
+        'dal': ['Dallas Mavericks', 'Mavericks'],
+        'sas': ['San Antonio Spurs', 'Spurs'],
+        'nop': ['New Orleans Pelicans', 'Pelicans'],
+        'noh': ['New Orleans Pelicans', 'Pelicans'],
+        'nok': ['New Orleans Pelicans', 'Pelicans']
+    }
+
+    return team_names[team][0]
+
+def get_dk_name_from_team(team):
+    name_map = {
+        'Boston Celtics': 'BOS Celtics',
+        'Brooklyn Nets': 'BKN Nets',
+        'Toronto Raptors': 'TOR Raptors',
+        'Philadelphia 76ers': 'PHI 76ers',
+        'New York Knicks': 'NY Knicks',
+        'Chicago Bulls': 'CHI Bulls',
+        'Cleveland Cavaliers': 'CLE Cavaliers',
+        'Detroit Pistons': 'DET Pistons',
+        'Indiana Pacers': 'IND Pacers',
+        'Milwaukee Bucks': 'MIL Bucks',
+        'Washington Wizards': 'WAS Wizards',
+        'Atlanta Hawks': 'ATL Hawks',
+        'Orlando Magic': 'ORL Magic',
+        'Miami Heat': 'MIA Heat',
+        'Charlotte Hornets': 'CHA Hornets',
+        'Minnesota Timberwolves': 'MIN Timberwolves',
+        'Oklahoma City Thunder': 'OKC Thunder',
+        'Denver Nuggets': 'DEN Nuggets',
+        'Portland Trail Blazers': 'POR Trail Blazers',
+        'Utah Jazz': 'UTA Jazz',
+        'Los Angeles Lakers': 'LA Lakers',
+        'Los Angeles Clippers': 'LA Clippers',
+        'Golden State Warriors': 'GS Warriors',
+        'Phoenix Suns': 'PHO Suns',
+        'Sacramento Kings': 'SAC Kings',
+        'Memphis Grizzlies': 'MEM Grizzlies',
+        'New Orleans Pelicans': 'NO Pelicans',
+        'Houston Rockets': 'HOU Rockets',
+        'San Antonio Spurs': 'SA Spurs',
+        'Dallas Mavericks': 'DAL Mavericks'
+    }
+
+    return name_map[team] if team in name_map else None

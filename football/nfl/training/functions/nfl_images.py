@@ -1,0 +1,115 @@
+def get_image(team):
+    team_images = {
+        'crd': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/ari.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'atl': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/atl.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'rav': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/bal.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'buf': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/buf.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'car': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/car.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'chi': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/chi.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'cin': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/cin.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'cle': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/cle.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'dal': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/dal.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'den': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/den.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'det': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/det.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'gnb': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/gb.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'htx': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/hou.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'clt': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/ind.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'jax': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/jax.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'kan': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/kc.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'rai': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/lv.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'sdg': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/lac.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'ram': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/lar.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'mia': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/mia.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'min': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/min.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'nwe': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/ne.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'nor': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/no.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'nyg': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/nyg.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'nyj': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/nyj.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'phi': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/phi.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'pit': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/pit.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'sea': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/sea.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'sfo': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/sf.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'tam': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/tb.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'oti': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/ten.png&w=120&h=120&scale=crop&cquality=120&location=origin',
+        'was': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/scoreboard/wsh.png&w=120&h=120&scale=crop&cquality=120&location=origin'
+    }
+
+    return team_images[team]
+
+def get_team_from_name(team):
+    team_names = {
+        'crd': ['Arizona Cardinals', 'Cardinals'],
+        'atl': ['Atlanta Falcons', 'Falcons'],
+        'rav': ['Baltimore Ravens', 'Ravens'],
+        'buf': ['Buffalo Bills', 'Bills'],
+        'car': ['Carolina Panthers', 'Panthers'],
+        'chi': ['Chicago Bears', 'Bears'],
+        'cin': ['Cincinnati Bengals', 'Bengals'],
+        'cle': ['Cleveland Browns', 'Browns'],
+        'dal': ['Dallas Cowboys', 'Cowboys'],
+        'den': ['Denver Broncos', 'Broncos'],
+        'det': ['Detroit Lions', 'Lions'],
+        'gnb': ['Green Bay Packers', 'Packers'],
+        'htx': ['Houston Texans', 'Texans'],
+        'clt': ['Indianapolis Colts', 'Colts'],
+        'jax': ['Jacksonville Jaguars', 'Jaguars'],
+        'kan': ['Kansas City Chiefs', 'Chiefs'],
+        'rai': ['Las Vegas Raiders', 'Oakland Raiders', 'Raiders'],
+        'sdg': ['Los Angeles Chargers', 'San Diego Chargers', 'Chargers'],
+        'ram': ['Los Angeles Rams', 'St. Louis Rams', 'Rams'],
+        'mia': ['Miami Dolphins', 'Dolphins'],
+        'min': ['Minnesota Vikings', 'Vikings'],
+        'nwe': ['New England Patriots', 'Patriots'],
+        'nor': ['New Orleans Saints', 'Saints'],
+        'nyg': ['New York Giants', 'Giants'],
+        'nyj': ['New York Jets', 'Jets'],
+        'phi': ['Philadelphia Eagles', 'Eagles'],
+        'pit': ['Pittsburgh Steelers', 'Steelers'],
+        'sea': ['Seattle Seahawks', 'Seahawks'],
+        'sfo': ['San Francisco 49ers', '49ers'],
+        'tam': ['Tampa Bay Buccaneers', 'Buccaneers'],
+        'oti': ['Tennessee Titans', 'Tennessee Oilers', 'Houston Oilers', 'Titans'],
+        'was': ['Washington Commanders', 'Washington Football Team', 'Washington Redskins', 'Commanders']
+    }
+
+    for key, value in team_names.items():
+        if team in value:
+            return key
+
+def get_name_from_team(team):
+    team_names = {
+        'crd': ['Arizona Cardinals', 'Cardinals'],
+        'atl': ['Atlanta Falcons', 'Falcons'],
+        'rav': ['Baltimore Ravens', 'Ravens'],
+        'buf': ['Buffalo Bills', 'Bills'],
+        'car': ['Carolina Panthers', 'Panthers'],
+        'chi': ['Chicago Bears', 'Bears'],
+        'cin': ['Cincinnati Bengals', 'Bengals'],
+        'cle': ['Cleveland Browns', 'Browns'],
+        'dal': ['Dallas Cowboys', 'Cowboys'],
+        'den': ['Denver Broncos', 'Broncos'],
+        'det': ['Detroit Lions', 'Lions'],
+        'gnb': ['Green Bay Packers', 'Packers'],
+        'htx': ['Houston Texans', 'Texans'],
+        'clt': ['Indianapolis Colts', 'Colts'],
+        'jax': ['Jacksonville Jaguars', 'Jaguars'],
+        'kan': ['Kansas City Chiefs', 'Chiefs'],
+        'rai': ['Las Vegas Raiders', 'Oakland Raiders', 'Raiders'],
+        'sdg': ['Los Angeles Chargers', 'San Diego Chargers', 'Chargers'],
+        'ram': ['Los Angeles Rams', 'St. Louis Rams', 'Rams'],
+        'mia': ['Miami Dolphins', 'Dolphins'],
+        'min': ['Minnesota Vikings', 'Vikings'],
+        'nwe': ['New England Patriots', 'Patriots'],
+        'nor': ['New Orleans Saints', 'Saints'],
+        'nyg': ['New York Giants', 'Giants'],
+        'nyj': ['New York Jets', 'Jets'],
+        'phi': ['Philadelphia Eagles', 'Eagles'],
+        'pit': ['Pittsburgh Steelers', 'Steelers'],
+        'sea': ['Seattle Seahawks', 'Seahawks'],
+        'sfo': ['San Francisco 49ers', '49ers'],
+        'tam': ['Tampa Bay Buccaneers', 'Buccaneers'],
+        'oti': ['Tennessee Titans', 'Tennessee Oilers', 'Houston Oilers', 'Titans'],
+        'was': ['Washington Commanders', 'Washington Football Team', 'Washington Redskins', 'Commanders']
+    }
+
+    return team_names[team][0]
