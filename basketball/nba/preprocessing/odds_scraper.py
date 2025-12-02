@@ -86,7 +86,7 @@ def fetch_event_links_alternate(session, event_group_id):
     """Fetch nba event links alternate method"""
     print("Fetching nba event links alternate method...")
 
-    league_url = f'https://sportsbook-nash.draftkings.com/sites/US-NY-SB/api/sportscontent/controldata/home/primaryMarkets/v1/markets?eventsQuery=%24filter%3DleagueId%20eq%20%27{event_group_id}%27&marketsQuery=%24filter%3Dtags%2Fany(t%3A%20t%20eq%20%27PrimaryMarket%27)&top=25&include=Events&entity=events&isBatchable=true'
+    league_url = f'https://sportsbook-nash.draftkings.com/sites/US-NY-SB/api/sportscontent/controldata/home/primaryMarkets/v1/markets?eventsQuery=%24filter%3DleagueId%20eq%20%27{event_group_id}%27&marketsQuery=%24filter%3Dtags%2Fany(t%3A%20t%20eq%20%27PrimaryMarket%27)&top=50&include=Events&entity=events&isBatchable=true'
     response = session.get(league_url, timeout=30)
 
     events = response.json()
