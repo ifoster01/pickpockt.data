@@ -58,11 +58,11 @@ def fetch_with_retry(session, url, timeout=30):
         return None
 
 def fetch_tournament_links(session):
-    """Fetch nba event tournament links"""
-    print("Fetching nba event tournament links...")
+    """Fetch tennis ATP event tournament links"""
+    print("Fetching tennis ATP event tournament links...")
     
-    # Get the current event group ids for football
-    response = session.get('https://sportsbook.draftkings.com/leagues/basketball/nba', timeout=30)
+    # Get the current event group ids for tennis
+    response = session.get('https://sportsbook.draftkings.com/sports/tennis', timeout=30)
 
     # Extract the variable window.__INITIAL_STATE__
     tournaments = response.text.split('window.__INITIAL_STATE__ = ')[1].split('"helpPage":')[0]
@@ -72,9 +72,9 @@ def fetch_tournament_links(session):
     # Extract the tournament links
     tournament_links = []
     for tournament in tournaments['sports']['data']:
-        if (tournament['displayName'] == 'Basketball'):
+        if (tournament['displayName'] == 'Tennis'):
             for event_group in tournament['eventGroupInfos']:
-                if (len(event_group['tags']) > 0) and event_group['nameIdentifier'] == 'NBA':
+                if (len(event_group['tags']) > 0):
                     tournament_links.append({
                         'urlName': event_group['urlName'],
                         'eventGroupId': event_group['eventGroupId']
@@ -82,11 +82,11 @@ def fetch_tournament_links(session):
     
     return tournament_links
 
-def fetch_event_links_alternate(session, event_group_id):
-    """Fetch nba event links alternate method"""
-    print("Fetching nba event links alternate method...")
+def fetch_event_links_alternate(session, tournament_link):
+    """Fetch tennis ATP event links alternate method"""
+    print("Fetching tennis ATP event links alternate method...")
 
-    league_url = f'https://sportsbook-nash.draftkings.com/sites/US-NY-SB/api/sportscontent/controldata/home/primaryMarkets/v1/markets?eventsQuery=%24filter%3DleagueId%20eq%20%27{event_group_id}%27&marketsQuery=%24filter%3Dtags%2Fany(t%3A%20t%20eq%20%27PrimaryMarket%27)&top=50&include=Events&entity=events&isBatchable=true'
+    league_url = f'https://sportsbook-nash.draftkings.com/sites/US-NY-SB/api/sportscontent/controldata/home/primaryMarkets/v1/markets?eventsQuery=%24filter%3DleagueId%20eq%20%27{tournament_link['eventGroupId']}%27&marketsQuery=%24filter%3Dtags%2Fany(t%3A%20t%20eq%20%27PrimaryMarket%27)&top=25&include=Events&entity=events&isBatchable=true'
     response = session.get(league_url, timeout=30)
 
     events = response.json()
@@ -96,14 +96,14 @@ def fetch_event_links_alternate(session, event_group_id):
     try:
         all_events = events['events']
     except:
-        print(f"No events found for {event_group_id}")
+        print(f"No events found for {tournament_link['urlName']}")
         return []
     
     for event in all_events:
         event_links.append({
             'urlName': event['name'].replace(' ', '-').lower(),
             'eventId': event['id'],
-            'eventGroupName': 'NBA',
+            'eventGroupName': tournament_link['urlName'].replace('-', ' ').title().replace('Atp', 'ATP'),
             'name': event['name'],
             'startDate': event['startEventDate']
         })
@@ -111,11 +111,11 @@ def fetch_event_links_alternate(session, event_group_id):
     return event_links
 
 def fetch_event_links(session, tournament_link):
-    """Fetch nba event links"""
+    """Fetch tennis ATP event links"""
 
-    tournament_url = f'https://sportsbook.draftkings.com/'
+    tournament_url = f'https://sportsbook.draftkings.com/leagues/tennis/{tournament_link["urlName"]}'
     
-    # Get the current event group ids for football
+    # Get the current event group ids for tennis
     response = session.get(tournament_url, timeout=30)
 
     # Extract the variable window.__INITIAL_STATE__
@@ -143,27 +143,20 @@ def fetch_event_links(session, tournament_link):
     return event_links
 
 def fetch_event_data(session, event_link):
-    """Fetch nba event data"""
+    """Fetch tennis ATP event data"""
+
+    # for moneyline, spread, and total markets
+    SUBCATEGORY_ID = '6364'
 
     try:
         # Get the current event group ids for tennis
-        url = f"https://sportsbook.draftkings.com/event/{event_link['urlName']}/{event_link['eventId']}"
+        url = f"https://sportsbook-nash.draftkings.com/sites/US-NY-SB/api/sportscontent/controldata/event/eventSubcategory/v1/markets?isBatchable=false&templateVars={event_link.get('eventId')}&marketsQuery=%24filter%3DeventId%20eq%20%27{event_link.get('eventId')}%27%20AND%20clientMetadata%2FsubCategoryId%20eq%20%27{SUBCATEGORY_ID}%27%20AND%20tags%2Fall%28t%3A%20t%20ne%20%27SportcastBetBuilder%27%29&include=MarketSplits&entity=markets"
         response = session.get(url, timeout=30)
-
-        print('url: ', url)
-
-        # Extract the variable window.__INITIAL_STATE__
-        events = response.text.split('window.__INITIAL_STATE__ = ')[1].split('"helpPage":')[0]
-        events += '"helpPage": {"content": ""}}'
-        events = json.loads(events)
-
-        # write the events to a file
-        with open('events.json', 'w') as f:
-            json.dump(events, f, indent=2)
+        events = response.json()
         
         # Cross reference the marketIds from the markets data with the marketIds from the selections data
-        markets = events['stadiumEventData']['markets']
-        selections = events['stadiumEventData']['selections']
+        markets = events['markets']
+        selections = events['selections']
 
         # Create a lookup for markets by ID
         markets_by_id = {market['id']: market for market in markets}
@@ -210,12 +203,6 @@ def fetch_event_data(session, event_link):
         print(f"Error fetching event data for {event_link['name']}: {str(e)}")
         return []
 
-def convert_odds_to_american(odds):
-    if odds >= 2:
-        return int((odds - 1) * 100)
-    else:
-        return int(-100 / (odds - 1)) if odds != 1 else None
-
 def format_and_save_data(all_event_data):
     """Format and save the data to a CSV file"""
     if not all_event_data:
@@ -244,23 +231,23 @@ def format_and_save_data(all_event_data):
             p2 = group.iloc[1]
             
             processed_data.append({
+                # add the scraped_at timestamp to the data and ensure its in UTC
+                'scraped_at': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S'),
                 'market_id': market_id,
                 'tournament_name': p1['tournament_name'],
                 'event_name': p1['event_name'],
                 'start_date': p1['start_date'],
                 'market_name': p1['market_name'],
                 'player1_name': p1['label'],
-                'player1_odds': convert_odds_to_american(p1['true_odds']),
+                'player1_odds': p1['true_odds'],
                 'player1_points': p1['points'],
                 'player1_outcome_type': p1['outcome_type'],
                 'player1_label': p1['label'],
                 'player2_name': p2['label'],
-                'player2_odds': convert_odds_to_american(p2['true_odds']),
+                'player2_odds': p2['true_odds'],
                 'player2_points': p2['points'],
                 'player2_outcome_type': p2['outcome_type'],
-                'player2_label': p2['label'],
-                # add the scraped_at timestamp to the data and ensure its in UTC
-                'scraped_at': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+                'player2_label': p2['label']
             })
         
         df_new_processed = pd.DataFrame(processed_data)
@@ -272,15 +259,10 @@ def format_and_save_data(all_event_data):
     data_dir = os.path.join(os.path.dirname(__file__), 'data')
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
-    csv_path = os.path.join(data_dir, 'nba_odds.csv')
+    csv_path = os.path.join(data_dir, 'tennis_odds.csv')
 
-    # order the df_new_processed by start_date
-    df_new_processed = df_new_processed.sort_values(by='start_date')
-    # reset the index starting from 0
-    df_new_processed.reset_index(drop=True, inplace=True)
-
-    # write the df_new_processed to the upcoming_nba_odds.csv file
-    df_new_processed.to_csv('data/upcoming_nba_odds.csv', index=False)
+    # write the df_new_processed to the upcoming_tennis_odds.csv file
+    df_new_processed.to_csv('data/upcoming_tennis_odds.csv', index=False)
 
     # Load existing data
     if os.path.exists(csv_path):
@@ -304,7 +286,7 @@ def format_and_save_data(all_event_data):
 
 def main():
     """Main function to run the script"""
-    print("Starting NBA Odds Scraper")
+    print("Starting Tennis Odds Scraper")
     
     # Create session
     session = create_session()
@@ -318,17 +300,12 @@ def main():
         event_links = []
         for tournament_link in tournament_links:
             print(f"Fetching event links for {tournament_link['urlName']}...")
-            event_links.extend(fetch_event_links(session, tournament_link))
-        print(f"Found {len(event_links)} event links")
-
-        if len(event_links) == 0:
-            print("No event links found, trying alternate method...")
-            # get set of unique eventGroupIds
-            event_group_ids = set([event_link['eventGroupId'] for event_link in tournament_links])
-            for event_group_id in event_group_ids:
-                print(f"Fetching event links for event group id {event_group_id}...")
-                event_links.extend(fetch_event_links_alternate(session, event_group_id))
-            print(f"Found {len(event_links)} event links")
+            new_event_links = fetch_event_links(session, tournament_link)
+            if len(new_event_links) > 0:
+                event_links.extend(new_event_links)
+            else:
+                print(f"No event links found for {tournament_link['urlName']}, trying alternate method...")
+                event_links.extend(fetch_event_links_alternate(session, tournament_link))
 
         # Step 3: Get event data for each event
         all_event_data = []

@@ -42,6 +42,7 @@ jobs:
           python3 fight_scraper.py next
           python3 fighter_scraper.py new
           python3 odds_scraper.py
+          python3 odds_scraper_bkup.py
           python3 processing.py generate
           python3 processing.py new
           cd ..

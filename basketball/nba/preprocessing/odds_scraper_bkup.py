@@ -144,26 +144,19 @@ def fetch_event_links(session, tournament_link):
 
 def fetch_event_data(session, event_link):
     """Fetch nba event data"""
+    
+    # for moneyline, spread, and total markets
+    SUBCATEGORY_ID = '4511'
 
     try:
-        # Get the current event group ids for tennis
-        url = f"https://sportsbook.draftkings.com/event/{event_link['urlName']}/{event_link['eventId']}"
+        # Get the current event group ids for nba
+        url = f"https://sportsbook-nash.draftkings.com/sites/US-NY-SB/api/sportscontent/controldata/event/eventSubcategory/v1/markets?isBatchable=false&templateVars={event_link.get('eventId')}&marketsQuery=%24filter%3DeventId%20eq%20%27{event_link.get('eventId')}%27%20AND%20clientMetadata%2FsubCategoryId%20eq%20%27{SUBCATEGORY_ID}%27%20AND%20tags%2Fall%28t%3A%20t%20ne%20%27SportcastBetBuilder%27%29&include=MarketSplits&entity=markets"
         response = session.get(url, timeout=30)
-
-        print('url: ', url)
-
-        # Extract the variable window.__INITIAL_STATE__
-        events = response.text.split('window.__INITIAL_STATE__ = ')[1].split('"helpPage":')[0]
-        events += '"helpPage": {"content": ""}}'
-        events = json.loads(events)
-
-        # write the events to a file
-        with open('events.json', 'w') as f:
-            json.dump(events, f, indent=2)
+        events = response.json()
         
         # Cross reference the marketIds from the markets data with the marketIds from the selections data
-        markets = events['stadiumEventData']['markets']
-        selections = events['stadiumEventData']['selections']
+        markets = events['markets']
+        selections = events['selections']
 
         # Create a lookup for markets by ID
         markets_by_id = {market['id']: market for market in markets}
@@ -334,6 +327,7 @@ def main():
         all_event_data = []
         for event_link in event_links:
             print(f"Fetching event data for {event_link['name']}...")
+            event_data = fetch_event_data(session, event_link)
             try:
                 event_data = fetch_event_data(session, event_link)
             except Exception as e:
@@ -344,6 +338,7 @@ def main():
             except Exception as e:
                 print(f"Error appending event data for {event_link['name']}: {str(e)}")
                 continue
+        
         print(f"Found {len(all_event_data)} event data")
 
         # Step 4: Convert to a DataFrame, format, and save as a CSV

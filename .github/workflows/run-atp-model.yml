@@ -39,6 +39,7 @@ jobs:
           pip install -r requirements.txt
           cd tennis/atp/preprocessing
           python3 odds_scraper.py
+          python3 odds_scraper_bkup.py
           python3 atp_match_data.py new
           python3 processing.py new
           cd ..
