@@ -56,11 +56,15 @@ class Scraper:
         """
         time.sleep(3)
         game_rows = soup.find("tbody").find_all("tr")
+        # reverse the game rows
+        game_rows = game_rows[::-1]
+
         current_week = None
         for tr in game_rows:
             week_elem = tr.find("th", {"data-stat": "week_num"})
+            opp_elem = tr.find("td", {"data-stat": "opp"})
             
-            if (not week_elem) or (week_elem and week_elem.text.strip() in ['Bye Week', 'Playoffs']):
+            if (not week_elem) or (week_elem and week_elem.text.strip() in ['Bye Week', 'Playoffs']) or (opp_elem and opp_elem.text.strip() in ['Bye Week', 'Playoffs']):
                 continue
 
             outcome_elem = tr.find("td", {"data-stat": "game_outcome"})
@@ -462,10 +466,14 @@ if __name__ == "__main__":
     start_time = time.time()
 
     # get the current year
-    current_year = datetime.now().year
+    current_year = None
+    if datetime.now().month >= 8:
+        current_year = datetime.now().year
+    else:
+        current_year = datetime.now().year - 1
 
     scraper = Scraper(use_crawlbase=True)
-    scraper.scrape_nfl_data(current_year, current_year, look_back_weeks=1)
+    scraper.scrape_nfl_data(current_year, current_year, look_back_weeks=2)
 
     print("Data scraping completed and saved to nfl_games.csv")
     end_time = time.time()

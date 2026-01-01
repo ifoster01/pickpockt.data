@@ -34,6 +34,7 @@ def add_spread_odds(processed_data):
       odds_row = odds_data[player_match | opponent_match]
 
       if odds_row.empty:
+          print(f'No odds found for {row["team"]} vs {row["opp"]}')
           continue
 
       # date values are already normalized to 'YYYY-MM-DD' strings above
@@ -43,6 +44,7 @@ def add_spread_odds(processed_data):
       odds_row = odds_row[odds_row['start_date'] == date]
 
       if odds_row.empty:
+          print(f'No odds found for {row["team"]} vs {row["opp"]} on {date}')
           continue
 
       if len(odds_row) > 1:
@@ -63,8 +65,13 @@ def add_spread_odds(processed_data):
           processed_spread_data.loc[index, 'opp_spread_line'] = odds_row['player1_points'].values[0]
 
   # remove any rows where there is not a book spread line
-  processed_spread_data = processed_spread_data[processed_spread_data['team_spread_line'].notna()]
-  processed_spread_data = processed_spread_data[processed_spread_data['opp_spread_line'].notna()]
+  try:
+    processed_spread_data = processed_spread_data[processed_spread_data['team_spread_line'].notna()]
+    processed_spread_data = processed_spread_data[processed_spread_data['opp_spread_line'].notna()]
+  except Exception as e:
+    print(f'Error removing rows where there is not a book spread line: {e}')
+    print('Likely due to no odds found for the game')
+    return processed_spread_data
 
   print(f'Found spread odds: {count}')
   return processed_spread_data
@@ -125,7 +132,12 @@ def add_total_odds(processed_data):
     processed_total_data.loc[index, 'total_line'] = odds_row['player1_points'].values[0]
 
   # remove any rows where there is not a book total line
-  processed_total_data = processed_total_data[processed_total_data['total_line'].notna()]
+  try:
+    processed_total_data = processed_total_data[processed_total_data['total_line'].notna()]
+  except Exception as e:
+    print(f'Error removing rows where there is not a book total line: {e}')
+    print('Likely due to no odds found for the game')
+    return processed_total_data
 
   print(f'Found total odds: {count}')
   return processed_total_data
